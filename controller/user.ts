@@ -1,7 +1,6 @@
 import { User } from '../interface';
 import { UserService } from '../service/user';
 import { Method } from '../utils/method';
-import { Request as R } from '../utils/request';
 
 const { GET, POST, PUT, DELETE } = Method;
 
@@ -10,8 +9,20 @@ export const Controller = {
     // 获取用户信息
     '': {
         [GET]: async function(event: any, data: any) {
-            const auth = R.getRequestHeaders(event, 'auth');
-            return auth;
+            try {
+                const auth = event.auth;
+                const userId = auth.id;
+                const user = await UserService.getById(userId);
+                return {
+                    username: (user as User).username,
+                    nikeName: (user as User).nikeName,
+                    email: (user as User).email,
+                    createTime: (user as User).createTime,
+                    updateTime: (user as User).updateTime
+                }
+            } catch (error) {
+                throw error;
+            }
         }
     },
     
@@ -43,10 +54,13 @@ export const Controller = {
                         userInfo: {
                             username: (user as User).username,
                             nikeName: (user as User).nikeName,
-                            email: (user as User).email
+                            email: (user as User).email,
+                            password: ''
                         },
-                        auth: JSON.stringify(user)
-                        
+                        auth: {
+                            token: JSON.stringify(user),
+                            expired: Date.now() + 30*24*60*60*1000
+                        }
                     };
                 }
                 
