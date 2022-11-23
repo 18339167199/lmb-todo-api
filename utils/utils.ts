@@ -1,23 +1,36 @@
 'use strict';
 
 export class ApiResponse {
-
     code: number;
     data: any;
     msg: string;
 
-    constructor({ code, data, msg }: { code: number, data: any, msg: string }) {
+    constructor({ code, data, msg }: { code: number; data: any; msg: string }) {
         this.code = code;
-        this.data = (data != null && data != undefined) ? data : null;
+        this.data = data != null && data != undefined ? data : null;
         this.msg = msg || '';
     }
-    setCode(code: number) { this.code = code }
-    getCode() { return this.code }
-    setMsg(msg: string) { this.msg = msg }
-    getMsg() { return this.msg }
-    setData(data: any) { this.data = data }
-    getData() { return this.data }
-    static c(code: number, msg: string, data?: any) { return new ApiResponse({ code, msg, data }) }
+    setCode(code: number) {
+        this.code = code;
+    }
+    getCode() {
+        return this.code;
+    }
+    setMsg(msg: string) {
+        this.msg = msg;
+    }
+    getMsg() {
+        return this.msg;
+    }
+    setData(data: any) {
+        this.data = data;
+    }
+    getData() {
+        return this.data;
+    }
+    static c(code: number, msg: string, data?: any) {
+        return new ApiResponse({ code, msg, data });
+    }
 }
 
 export const Code = {
@@ -28,7 +41,7 @@ export const Code = {
     C_UNKOWN_ERROR: 1000, // 服务端未知错误
     C_NOT_LOGIN_ERROR: 1001, // 用户未登录
     C_PARAMETER_ERROR: 1002, // 参数错误
-    S_UNKOWN_ERROR: 10001 // 服务端未知错误
+    S_UNKOWN_ERROR: 10001, // 服务端未知错误
 };
 
 export const getCurrentDateStr = () => {

@@ -4,15 +4,14 @@ import { Code, ApiResponse } from './utils/utils';
 import { Request as R } from './utils/request';
 
 export class Router {
-
     controllerMap: { [propName: string]: string };
     whiteList: string[];
-    
+
     constructor(controllerMap: { [propName: string]: string }, whiteList: string[]) {
         this.controllerMap = controllerMap;
         this.whiteList = whiteList;
     }
-    
+
     handlerRequest(event: any, response: (error: Error | null, data: any) => void) {
         const c = this.preHandlerRequest(event);
         if (!c) {
@@ -20,16 +19,17 @@ export class Router {
             return;
         }
 
-        const url = R.getRequestURL(event), method = R.getRequestMethod(event);
+        const url = R.getRequestURL(event),
+            method = R.getRequestMethod(event);
         let controllerFilePath, controllerBaseURI, controllerFunction;
-        
-        Object.keys(this.controllerMap).forEach(key => {
+
+        Object.keys(this.controllerMap).forEach((key) => {
             if (url.startsWith(key)) {
                 controllerBaseURI = key;
                 controllerFilePath = this.controllerMap[key];
             }
         });
-        
+
         if (controllerFilePath && controllerBaseURI) {
             // @ts-ignore
             const { Controller } = require(controllerFilePath);
@@ -42,7 +42,7 @@ export class Router {
                 return false;
             }
         }
-        
+
         if (controllerFunction) {
             const data = R.getRequestData(event);
             controllerFunction(event, data).then(
@@ -65,14 +65,14 @@ export class Router {
             );
         }
     }
-    
+
     preHandlerRequest(event: any) {
         if (event && event.body) {
             try {
                 event.body = JSON.parse(event.body);
             } catch (error) {}
         }
-        
+
         // token 信息解码
         const url = R.getRequestURL(event);
         if (!this.whiteList.includes(url)) {
@@ -81,9 +81,9 @@ export class Router {
                 event['auth'] = {
                     id: 1,
                     username: 'root',
-                    email: '18339167199@163.com'
-                }
-                return true
+                    email: '18339167199@163.com',
+                };
+                return true;
             } else {
                 return false;
             }
@@ -91,5 +91,4 @@ export class Router {
             return true;
         }
     }
-};
-
+}

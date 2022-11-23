@@ -1,13 +1,12 @@
-import { Method } from "../utils/method";
+import { Method } from '../utils/method';
 import { GroupService as G } from '../service/group';
 
 const { GET, POST, PUT, DELETE } = Method;
 
 export const Controller = {
-    
     '': {
         // 新增分组
-        [POST]: async function(event: any, data: any) {
+        [POST]: async function (event: any, data: any) {
             try {
                 const user = event.auth;
                 const userId = user.id;
@@ -15,14 +14,14 @@ export const Controller = {
                 return await G.add({
                     gname: data.gname,
                     descr: data.descr,
-                    userId
+                    userId,
                 });
             } catch (error) {
                 throw error;
             }
         },
         // 获取用户全部分组
-        [GET]: async function(event: any, data: any) {
+        [GET]: async function (event: any, data: any) {
             try {
                 const groupId = data?.groupId;
                 const userId = event.auth.id;
@@ -34,22 +33,20 @@ export const Controller = {
             }
         },
         // 删除分组
-        [DELETE]: async function(event: any, data: any) {
+        [DELETE]: async function (event: any, data: any) {
             try {
-                const groupId = data?.groupId;
-                return await G.del(groupId);
+                return await G.del(data?.groupId);
             } catch (error) {
                 throw error;
             }
         },
         // 更新分组
-        [PUT]: async function(event: any, data: any) {
+        [PUT]: async function (event: any, data: any) {
             try {
                 return await G.update(data);
             } catch (error) {
                 throw error;
             }
-        }
+        },
     },
-    
 };
