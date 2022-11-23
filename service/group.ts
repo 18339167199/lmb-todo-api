@@ -14,7 +14,7 @@ export const GroupService = {
                     FilterExpression: 'id = :id',
                     ExpressionAttributeValues: { ':id': id },
                 },
-                (error, data) => {
+                (error: any, data: any) => {
                     error ? reject(error) : resolve(data && data.Items && data.Items.length > 0 ? (data.Items[0] as Group) : null);
                 }
             );
@@ -34,7 +34,7 @@ export const GroupService = {
                     FilterExpression: 'userId = :userId',
                     ExpressionAttributeValues: { ':userId': userId },
                 },
-                (error, data) => {
+                (error: any, data: any) => {
                     error ? reject(error) : resolve(data.Items as Group[]);
                 }
             );
@@ -62,7 +62,7 @@ export const GroupService = {
                     TableName,
                     Item,
                 },
-                (error, data) => {
+                (error: any, data: any) => {
                     error ? reject(error) : resolve(Item);
                 }
             );
@@ -84,7 +84,7 @@ export const GroupService = {
                     ExpressionAttributeValues: { ':id': id },
                     Key: { id: id },
                 },
-                (error, data) => {
+                (error: any, data: any) => {
                     error ? reject(error) : resolve(data);
                 }
             );
@@ -124,7 +124,7 @@ export const GroupService = {
                     ExpressionAttributeValues: expressionAttributeValues,
                     ReturnValues: 'UPDATED_NEW',
                 },
-                (error, data) => {
+                (error: any, data: any) => {
                     error ? reject(error) : resolve(data);
                 }
             );
@@ -149,7 +149,7 @@ export const GroupService = {
                     },
                     ReturnValues: 'UPDATED_NEW',
                 },
-                (error, data) => {
+                (error: any, data: any) => {
                     error ? reject(error) : resolve(true);
                 }
             );

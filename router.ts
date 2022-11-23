@@ -2,6 +2,7 @@
 
 import { Code, ApiResponse } from './utils/utils';
 import { Request as R } from './utils/request';
+import { decode } from './utils/jwt';
 
 export class Router {
     controllerMap: { [propName: string]: string };
@@ -78,11 +79,7 @@ export class Router {
         if (!this.whiteList.includes(url)) {
             const auth = R.getRequestHeaders(event, 'authorization');
             if (auth) {
-                event['auth'] = {
-                    id: 1,
-                    username: 'root',
-                    email: '18339167199@163.com',
-                };
+                event['auth'] = decode(auth);
                 return true;
             } else {
                 return false;

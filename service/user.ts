@@ -15,7 +15,7 @@ export const UserService = {
                         ':username': 'root112',
                     },
                 },
-                function (error, data) {
+                function (error: any, data: any) {
                     error ? reject(error) : resolve(data as User[]);
                 }
             );
@@ -33,7 +33,7 @@ export const UserService = {
                         ':id': id,
                     },
                 },
-                (error, data) => {
+                (error: any, data: any) => {
                     error ? reject(error) : resolve(data && data.Items && data.Items[0] ? (data.Items[0] as User) : null);
                 }
             );
@@ -51,7 +51,7 @@ export const UserService = {
                     FilterExpression: password ? 'username = :username AND password = :password' : 'username = :username',
                     ExpressionAttributeValues: attr,
                 },
-                (error, data) => {
+                (error: any, data: any) => {
                     error ? reject(error) : resolve(data && data.Items && data.Items[0] ? (data.Items[0] as User) : null);
                 }
             );
@@ -80,7 +80,7 @@ export const UserService = {
             updateTime: '',
         };
         return new Promise((resolve, reject) => {
-            db.put({ TableName, Item }, (error, data) => {
+            db.put({ TableName, Item }, (error: any, data: any) => {
                 error ? reject(error) : resolve(Item);
             });
         });

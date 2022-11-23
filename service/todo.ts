@@ -18,7 +18,7 @@ export const TodoService = {
                     FilterExpression: 'id = :id',
                     ExpressionAttributeValues: { ':id': id },
                 },
-                (error, data) => {
+                (error: any, data: any) => {
                     error ? reject(error) : resolve(data && data.Items && data.Items.length > 0 ? (data.Items[0] as Todo) : null);
                 }
             );
@@ -39,7 +39,7 @@ export const TodoService = {
                     FilterExpression: 'groupId = :id',
                     ExpressionAttributeValues: { ':id': id },
                 },
-                (error, data) => {
+                (error: any, data: any) => {
                     error ? reject(error) : resolve(data.Items as Todo[]);
                 }
             );
@@ -64,7 +64,7 @@ export const TodoService = {
             scheduledTime: scheduledTime || '',
         };
         return new Promise((resolve, reject) => {
-            db.put({ TableName, Item }, (error, data) => {
+            db.put({ TableName, Item }, (error: any, data: any) => {
                 error ? reject(error) : resolve(Item as Todo);
             });
         });
@@ -104,7 +104,7 @@ export const TodoService = {
                     ExpressionAttributeValues: expressionAttributeValues,
                     ReturnValues: 'UPDATED_NEW',
                 },
-                (error, data) => {
+                (error: any, data: any) => {
                     error ? reject(error) : resolve(data);
                 }
             );
@@ -125,7 +125,7 @@ export const TodoService = {
                     ExpressionAttributeValues: { ':id': id },
                     Key: { id: id },
                 },
-                (error, data) => {
+                (error: any, data: any) => {
                     error ? reject(error) : resolve(true);
                 }
             );
@@ -141,7 +141,7 @@ export const TodoService = {
                     FilterExpression: `contains(content, :keyword)`,
                     ExpressionAttributeValues: { ':keyword': keyword },
                 },
-                (error, data) => {
+                (error: any, data: any) => {
                     error ? reject(error) : resolve(data.Items);
                 }
             );

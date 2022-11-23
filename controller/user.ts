@@ -3,7 +3,7 @@ import { UserService as U } from '../service/user';
 import { GroupService as G } from '../service/group';
 import { TodoService as T } from '../service/todo';
 import { Method } from '../utils/method';
-import { Group } from 'aws-sdk/clients/budgets';
+import { createToken } from '../utils/jwt';
 
 const { GET, POST, PUT, DELETE } = Method;
 
@@ -70,7 +70,12 @@ export const Controller = {
                             password: '',
                         },
                         auth: {
-                            token: JSON.stringify(user),
+                            token: createToken({
+                                id: user.id,
+                                username: user.username,
+                                nikeName: user.nikeName,
+                                email: user.email
+                            }),
                             expired: Date.now() + 30 * 24 * 60 * 60 * 1000,
                         },
                     };
