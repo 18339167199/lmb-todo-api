@@ -77,10 +77,13 @@ export class Router {
         // token 信息解码
         const url = R.getRequestURL(event);
         if (!this.whiteList.includes(url)) {
-            const auth = R.getRequestHeaders(event, 'authorization');
+            const auth: string = R.getRequestHeaders(event, 'authorization');
             if (auth) {
-                event['auth'] = decode(auth);
-                return true;
+                const token = auth.split(' ').length === 2 ? auth.split(' ')[1] : undefined;
+                if (token) {
+                    event['auth'] = decode(token);
+                    return true;
+                }
             } else {
                 return false;
             }
