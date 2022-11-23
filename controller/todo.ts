@@ -40,7 +40,7 @@ export const Controller = {
             try {
                 const todo = await T.getById(data.id);
                 await G.todoChange('m', (todo as Todo).groupId);
-                return await T.del(data);
+                return await T.del(data.id);
             } catch (error) {
                 throw error;
             }

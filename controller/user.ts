@@ -1,6 +1,9 @@
 import { User } from '../interface';
-import { UserService } from '../service/user';
+import { UserService as U } from '../service/user';
+import { GroupService as G } from '../service/group';
+import { TodoService as T } from '../service/todo';
 import { Method } from '../utils/method';
+import { Group } from 'aws-sdk/clients/budgets';
 
 const { GET, POST, PUT, DELETE } = Method;
 
@@ -11,7 +14,7 @@ export const Controller = {
             try {
                 const auth = event.auth;
                 const userId = auth.id;
-                const user = await UserService.getById(userId);
+                const user = await U.getById(userId);
                 return {
                     username: (user as User).username,
                     nikeName: (user as User).nikeName,
@@ -29,8 +32,18 @@ export const Controller = {
     '/register': {
         [POST]: async function (event: any, data: any) {
             try {
-                const addUserResult = await UserService.add(data);
-                return addUserResult;
+                const user = await U.add(data);
+                const userId = user.id;
+
+                const group1 = await G.add({ userId, gname: '我的一天', descr: '每日计划' });
+                await G.add({ userId, gname: '重要', descr: '重要的事情' });
+                await G.add({ userId, gname: '今天吃什么', descr: '' });
+                await G.add({ userId, gname: '娱乐活动安排', descr: '放松身心，适当运动~' });
+
+                await T.add({ groupId: group1.id, content: '我的待办，今天的任务已完成！', done: 1 });
+                await T.add({ groupId: group1.id, content: '待办已完成，继续完成下一个待办！', star: 1 });
+                
+                return user;
             } catch (error) {
                 throw error;
             }
@@ -46,7 +59,7 @@ export const Controller = {
                     throw new Error('username or password is empty!');
                 }
 
-                const user = await UserService.getByUsernameAndPassword(username, password);
+                const user = await U.getByUsernameAndPassword(username, password);
                 if (user) {
                     // 登录成功
                     return {

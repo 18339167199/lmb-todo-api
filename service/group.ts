@@ -2,6 +2,7 @@ import { db } from '../utils/db';
 import { getCurrentDateStr } from '../utils/utils';
 import type { Group } from '../interface';
 const TableName = 'lmb-todo-groups';
+const TodoTableName = 'lmb-todo-todos';
 
 export const GroupService = {
     // 按 id 查询分组
@@ -41,9 +42,8 @@ export const GroupService = {
     },
 
     // 新增分组
-    add(group: Group): Promise<Group> {
-        const { gname, descr, userId } = group;
-        if (!gname) {
+    add({ userId, gname, descr }: { userId: number; gname: string; descr?: string }): Promise<Group> {
+        if (!gname || !userId) {
             Promise.reject(new Error('gname is empty!'));
         }
 
@@ -70,23 +70,22 @@ export const GroupService = {
     },
 
     // 按 id 删除分组
-    del(id: number): Promise<number> {
+    del(id: number): Promise<any> {
         if (!id) {
             return Promise.reject(new Error('id is empty!'));
         }
 
         const ids = typeof id === 'number' ? [id] : id;
-
         return new Promise((resolve, reject) => {
             db.delete(
                 {
                     TableName,
-                    ConditionExpression: 'id IN (:id)',
-                    ExpressionAttributeValues: { ':id': ids },
-                    Key: { id: { N: ids } },
+                    ConditionExpression: 'id = :id',
+                    ExpressionAttributeValues: { ':id': id },
+                    Key: { id: id },
                 },
                 (error, data) => {
-                    error ? reject(error) : resolve(id);
+                    error ? reject(error) : resolve(data);
                 }
             );
         });

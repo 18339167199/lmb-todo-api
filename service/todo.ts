@@ -47,8 +47,7 @@ export const TodoService = {
     },
 
     // 新增待办
-    add(todo: Todo): Promise<Todo> {
-        const { content, groupId } = todo;
+    add({ groupId, content, note, scheduledTime, done, star }: { groupId: number, content: string, note?: string, scheduledTime?: string, done?: 0 | 1, star?: 0 | 1 }): Promise<Todo> {
         if (!content || !groupId) {
             return Promise.reject(new Error('content or groupId is empty!'));
         }
@@ -56,13 +55,13 @@ export const TodoService = {
         const Item = {
             id: Date.now(),
             groupId,
-            done: 0,
-            star: 0,
+            done: done|| 0,
+            star: star || 0,
             content,
-            note: todo.note || '',
+            note: note || '',
             createTime: getCurrentDateStr(),
             updateTime: '',
-            scheduledTime: todo.scheduledTime || '',
+            scheduledTime: scheduledTime || '',
         };
         return new Promise((resolve, reject) => {
             db.put({ TableName, Item }, (error, data) => {
@@ -113,8 +112,7 @@ export const TodoService = {
     },
 
     // 删除待办
-    del(todo: Todo): Promise<boolean> {
-        const { id } = todo;
+    del(id: number): Promise<boolean> {
         if (!id) {
             return Promise.reject(new Error('groupId or id is empty!'));
         }

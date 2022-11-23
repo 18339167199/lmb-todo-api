@@ -1,5 +1,6 @@
 import { Method } from '../utils/method';
 import { GroupService as G } from '../service/group';
+import { TodoService as T } from '../service/todo';
 
 const { GET, POST, PUT, DELETE } = Method;
 
@@ -35,7 +36,10 @@ export const Controller = {
         // 删除分组
         [DELETE]: async function (event: any, data: any) {
             try {
-                return await G.del(data?.groupId);
+                const id = data.id;
+                const todos = await T.getByGroupId(id);
+                await Promise.all(todos.map(todo => T.del(todo.id)));
+                return await G.del(id);
             } catch (error) {
                 throw error;
             }
